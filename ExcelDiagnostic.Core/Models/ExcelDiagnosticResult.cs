@@ -55,11 +55,11 @@ namespace ExcelDiagnostic.Core.Models
                 }
             }
 
-            // 2)  Warnings sheet
-            CreateWarningsSheet(outPackage);
-
-            // 3)  Errors 
+            // 2)  Errors 
             CreateErrorsSheet(outPackage);
+
+            // 3)  Warnings sheet
+            CreateWarningsSheet(outPackage);
 
             var fi = new FileInfo(outputPath);
             if (fi.Exists) fi.Delete();

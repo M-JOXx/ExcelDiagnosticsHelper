@@ -23,7 +23,7 @@ namespace ExcelUpload
             //You could Majd Add DI to your application WEB/API like this or inject it as <IExcelReader, ExcelReader>.
 
             /////////////////////////Option two///////////////////////////////
-            string filePath = @"DeskTop\SampleTransactions.xlsx";// or try xlx extension file like .xls
+            string filePath = @"C:\Users\Adestra\Documents\SampleTransactions.xlsx";// or try xlx extension file like .xls
             string errorsOutFileName = "invoices_errors";
 
             var errorsOut = $"{errorsOutFileName}_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.xlsx";
@@ -43,15 +43,13 @@ namespace ExcelUpload
 
             var reader = provider.GetRequiredService<IExcelReader>();
 
-            var validators = new IRowValidator<ExcelInvoiceRow>[] { new InvoiceRowValidator() };
-
             if (!File.Exists(filePath))
             {
                 Console.WriteLine($"File does not exist: {filePath}");
                 return;
             }
 
-            var result = reader.ReadExcel<ExcelInvoiceRow>(filePath, rowValidators: validators);
+            var result = reader.ReadExcel<ExcelInvoiceRow>(filePath);
 
             
             //Sample counter results for valid/invalid also over cells/rows 
@@ -86,7 +84,6 @@ namespace ExcelUpload
             //string errorsOut = $"invoices_errors_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.xlsx";
 
             ////IExcelReader reader = new ExcelReader();
-            //var validators = new List<IRowValidator<ExcelInvoiceRow>> { new SampleInvoiceRowValidator() };
 
             //var result = reader.ReadExcel<ExcelInvoiceRow>(
             //    filePath: inputPath,
