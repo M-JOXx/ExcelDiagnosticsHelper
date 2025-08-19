@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExcelDiagnostics.Core\ExcelDiagnostics.Core.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelDiagnostic.Core\ExcelDiagnostic.Core.csproj" />
+  </ItemGroup>
+
+
 
 </Project>
