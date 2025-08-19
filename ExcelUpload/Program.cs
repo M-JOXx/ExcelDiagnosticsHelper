@@ -23,7 +23,7 @@ namespace ExcelUpload
             //You could Majd Add DI to your application WEB/API like this or inject it as <IExcelReader, ExcelReader>.
 
             /////////////////////////Option two///////////////////////////////
-            string filePath = @"C:\Users\Adestra\Documents\SampleTransactions.xlsx";// or try xlx extension file like .xls
+            string filePath = @"DeskTop\SampleTransactions.xlsx";// or try xlx extension file like .xls
             string errorsOutFileName = "invoices_errors";
 
             var errorsOut = $"{errorsOutFileName}_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.xlsx";
@@ -72,7 +72,7 @@ namespace ExcelUpload
             //or  majd you colud use this  simple instance creation 
 
 
-            //string filePath = "C:\\Users\\Adestra\\Documents\\SampleTransactions.xlsx";
+            //string filePath = "DeskTop\SampleTransactions.xlsx";
 
             //if (!File.Exists(filePath))
             //{
