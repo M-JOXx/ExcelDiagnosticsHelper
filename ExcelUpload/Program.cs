@@ -21,7 +21,8 @@ namespace ExcelUpload
             //,This is simple console application just for testing purposes .
 
             //You could Majd Add DI to your application WEB/API like this or inject it as <IExcelReader, ExcelReader>.
-            //option one
+
+            /////////////////////////Option two///////////////////////////////
             string filePath = @"C:\Users\Adestra\Documents\SampleTransactions.xlsx";// or try xlx extension file like .xls
             string errorsOutFileName = "invoices_errors";
 
