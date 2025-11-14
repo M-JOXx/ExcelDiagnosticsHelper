@@ -10,7 +10,7 @@ namespace ExcelDiagnostic.Core.Models
     /// Wrapper for a cell. Holds column index, parsed value, default value,
     /// parse function, validators, and error message. Provides IsValid/SetError.
     /// </summary>
-    public class ExcelItem<T>
+    public class ExcelCell<T>
     {
         // it could be set by order of model(template)
         /// <summary> column index in the worksheet.

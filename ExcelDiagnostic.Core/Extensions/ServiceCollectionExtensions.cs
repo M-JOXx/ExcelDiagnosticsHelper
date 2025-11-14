@@ -17,6 +17,8 @@ namespace ExcelDiagnostic.Core.Extensions
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;// Set the license context for EPPlus
 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // For static constructor to register CodePagesEncodingProvider xls files support
+
             //You could only take this DI 
             services.TryAddScoped<IExcelReader, ExcelReader>();
             return services;

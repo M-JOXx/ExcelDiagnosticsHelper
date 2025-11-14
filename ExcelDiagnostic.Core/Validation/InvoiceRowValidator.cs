@@ -40,6 +40,10 @@ namespace ExcelDiagnostic.Core.Validation
             {
                 row.SetCellWarning(nameof(data.Amount), "Amount is unusually high.");
             }
+            if (data.Amount.Value <= 0)
+            {
+                row.SetCellWarning(nameof(data.Amount), "Amount must be greater than 0.");
+            }
         }
     }
 }

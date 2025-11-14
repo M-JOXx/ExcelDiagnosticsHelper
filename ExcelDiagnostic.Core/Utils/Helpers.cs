@@ -93,7 +93,7 @@ namespace ExcelDiagnostic.Core.Utils
             => typeof(TModel)
                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                .Where(p => p.PropertyType.IsGenericType &&
-                           p.PropertyType.GetGenericTypeDefinition() == typeof(ExcelItem<>))
+                           p.PropertyType.GetGenericTypeDefinition() == typeof(ExcelCell<>))
                .OrderBy(OrderByDeclarationOrder);
 
         public static int OrderByDeclarationOrder(PropertyInfo p) => p.MetadataToken;

@@ -20,10 +20,7 @@ namespace ExcelDiagnostic.Core.Readers
     /// </summary>
     public class ExcelReader : IExcelReader
     {
-        static ExcelReader()// For static constructor to register CodePagesEncodingProvider xls files support
-        {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        }
+       
 
         //add this you can pass only path of excel file;
         public ExcelDiagnosticResult<TModel> ReadExcel<TModel>(string filePath, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new()
@@ -42,7 +39,7 @@ namespace ExcelDiagnostic.Core.Readers
             return result;
         }
 
-        public IEnumerable<ExcelRowResult<TModel>> ReadExcelStream<TModel>(Stream excelStream, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new()
+        private IEnumerable<ExcelRowResult<TModel>> ReadExcelStream<TModel>(Stream excelStream, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new()
         {
 
             var props = Helpers.GetExcelItemProperties<TModel>();

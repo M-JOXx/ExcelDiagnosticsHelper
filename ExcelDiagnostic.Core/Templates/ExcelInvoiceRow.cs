@@ -10,19 +10,19 @@ namespace ExcelDiagnostic.Core.Templates
     //which is the model i call it templates so you can add more than one hre.
     public class ExcelInvoiceRow
     {
-        public ExcelItem<int> OrderId { get; set; } = new()
+        public ExcelCell<int> OrderId { get; set; } = new()
         {
             Index = 1,
             Required = true
         };
 
-        public ExcelItem<string> ItemCode { get; set; } = new()
+        public ExcelCell<string> ItemCode { get; set; } = new()
         {
             Index = 2,
             Required = true
         };
 
-        public ExcelItem<decimal?> Amount { get; set; } = new()
+        public ExcelCell<decimal?> Amount { get; set; } = new()
         {
             Index = 3,
             CustomParse = raw =>
@@ -37,13 +37,13 @@ namespace ExcelDiagnostic.Core.Templates
             },
         };
 
-        public ExcelItem<string> Type { get; set; } = new()
+        public ExcelCell<string> Type { get; set; } = new()
         {
             Index = 4,
             Required = true
         };
 
-        public ExcelItem<string> CustomerName { get; set; } = new()
+        public ExcelCell<string> CustomerName { get; set; } = new()
         {
             Index = 5,
             Required = true

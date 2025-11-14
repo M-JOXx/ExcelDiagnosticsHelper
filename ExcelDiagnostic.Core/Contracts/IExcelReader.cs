@@ -19,10 +19,6 @@ namespace ExcelDiagnostic.Core.Contracts
             int? headerRow = 1,
             IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new();
 
-        IEnumerable<ExcelRowResult<TModel>> ReadExcelStream<TModel>(
-            Stream excelStream,
-            int? headerRow = 1,
-            IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new();
 
     }
 }

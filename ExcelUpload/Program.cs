@@ -22,8 +22,8 @@ namespace ExcelUpload
 
             //You could Majd Add DI to your application WEB/API like this or inject it as <IExcelReader, ExcelReader>.
 
-            /////////////////////////Option two///////////////////////////////
-            string filePath = @"C:\Users\Adestra\Documents\SampleTransactions.xlsx";// or try xlx extension file like .xls
+            /////////////////////////Option One///////////////////////////////
+            string filePath = @"C:\Users\moham\OneDrive\Documents\TestSheet.xlsx";// or try xlx extension file like .xls
             string errorsOutFileName = "invoices_errors";
 
             var errorsOut = $"{errorsOutFileName}_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.xlsx";
@@ -49,9 +49,9 @@ namespace ExcelUpload
                 return;
             }
 
-            var result = reader.ReadExcel<ExcelInvoiceRow>(filePath);
+            var result = reader.ReadExcel<ExcelInvoiceRow>(filePath, rowValidators: new[] { new InvoiceRowValidator() });
 
-            
+
             //Sample counter results for valid/invalid also over cells/rows 
             Console.WriteLine($"Total Rows: {result.TotalRows}");
             Console.WriteLine($"Valid Rows: {result.ValidRowsCount}");
@@ -67,7 +67,7 @@ namespace ExcelUpload
 
 
             /////////////////////////Option two///////////////////////////////
-            //or  majd you colud use this  simple instance creation 
+            //or  majd you could use this  simple instance creation 
 
 
             //string filePath = "DeskTop\SampleTransactions.xlsx";
