@@ -20,16 +20,14 @@ namespace ExcelDiagnostic.Core.Readers
     /// </summary>
     public class ExcelReader : IExcelReader
     {
-       
-
         //add this you can pass only path of excel file;
-        public ExcelDiagnosticResult<TModel> ReadExcel<TModel>(string filePath, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new()
+        public ExcelDiagnosticResult<TModel> ReadExcel<TModel>(string filePath, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : IExcelSheet, new()
         {
             using var fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return ReadExcel<TModel>(fs, headerRow, rowValidators);
         }
 
-        public ExcelDiagnosticResult<TModel> ReadExcel<TModel>(Stream excelStream, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new()
+        public ExcelDiagnosticResult<TModel> ReadExcel<TModel>(Stream excelStream, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : IExcelSheet, new()
         {
             var result = new ExcelDiagnosticResult<TModel>();
             foreach (var row in ReadExcelStream<TModel>(excelStream, headerRow, rowValidators))
@@ -39,9 +37,8 @@ namespace ExcelDiagnostic.Core.Readers
             return result;
         }
 
-        private IEnumerable<ExcelRowResult<TModel>> ReadExcelStream<TModel>(Stream excelStream, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : new()
+        private IEnumerable<ExcelRowResult<TModel>> ReadExcelStream<TModel>(Stream excelStream, int? headerRow = 1, IEnumerable<IRowValidator<TModel>>? rowValidators = null) where TModel : IExcelSheet, new()
         {
-
             var props = Helpers.GetExcelItemProperties<TModel>();
             var mapping = ColumnMapping.BuildColumnMapping<TModel>(props);
 
@@ -50,7 +47,7 @@ namespace ExcelDiagnostic.Core.Readers
             {
                 int currentRowNumber = 0;
 
-                int effectiveHeaderRow = headerRow ?? 1;  
+                int effectiveHeaderRow = headerRow ?? 1;
                 int firstDataRow = effectiveHeaderRow + 1;
 
                 if (effectiveHeaderRow < 1)
@@ -58,12 +55,11 @@ namespace ExcelDiagnostic.Core.Readers
                     throw new ArgumentOutOfRangeException(nameof(headerRow), "Header row must be 1 or greater.");
                 }
 
-
                 do
                 {
                     currentRowNumber = 0;
 
-                    while (reader.Read()) 
+                    while (reader.Read())
                     {
                         currentRowNumber++;
 
@@ -103,7 +99,6 @@ namespace ExcelDiagnostic.Core.Readers
                                     var isValid = (bool)parseResult.Item2;
                                     var errMsg = (string?)parseResult.Item3;
 
-
                                     if (!isValid)
                                     {
                                         item.Value = item.DefaultValue;
@@ -128,6 +123,7 @@ namespace ExcelDiagnostic.Core.Readers
                             }
                         }
 
+                        // Run row validators
                         if (rowValidators != null)
                         {
                             foreach (var validator in rowValidators)
@@ -137,6 +133,7 @@ namespace ExcelDiagnostic.Core.Readers
                             }
                         }
 
+                        // Run cell validators and sync parsing errors
                         foreach (var prop in mapping)
                         {
                             dynamic? item = prop.Key.GetValue(model);
@@ -154,6 +151,10 @@ namespace ExcelDiagnostic.Core.Readers
                                 rowResult.SetCellError(prop.Key.Name, item.Error!);
                         }
 
+                        // Sync cell diagnostics one final time to catch any remaining errors/warnings
+                        // This ensures parsing errors and validator errors are both captured
+                        rowResult.SyncCellDiagnostics();
+
                         yield return rowResult;
                     }
 
@@ -165,7 +166,5 @@ namespace ExcelDiagnostic.Core.Readers
                 reader.Dispose();
             }
         }
-
-
     }
 }

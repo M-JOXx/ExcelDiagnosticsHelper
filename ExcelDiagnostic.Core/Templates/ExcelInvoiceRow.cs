@@ -1,4 +1,5 @@
-﻿using ExcelDiagnostic.Core.Models;
+﻿using ExcelDiagnostic.Core.Contracts;
+using ExcelDiagnostic.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace ExcelDiagnostic.Core.Templates
 {
     //which is the model i call it templates so you can add more than one hre.
-    public class ExcelInvoiceRow
+    public class ExcelInvoiceRow : IExcelSheet
     {
         public ExcelCell<int> OrderId { get; set; } = new()
         {

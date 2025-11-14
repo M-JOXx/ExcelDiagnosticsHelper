@@ -26,17 +26,58 @@ namespace ExcelDiagnostic.Core.Models
         //Custom parse function that takes raw object and returns a tuple of parsed value, validity, and error message ,
         //i make it more detailed than you mention in task and  one example in validator (amount) .
         public Func<object?, (T? ParsedValue, bool IsValid, string? ErrorMessage)>? CustomParse { get; set; }
-        public string? Error { get; private set; }
-        public bool IsValid() => string.IsNullOrWhiteSpace(Error);
-
-        public void SetError(string error) => Error = error;
-
-        //--------
-        
-        /// <summary> Optional custom validators that must all pass. </summary>
-        public List<Func<T?, bool>> Validators { get; } = new();
 
         /// <summary> Error message for this cell (null/empty if valid). </summary>
+        public string? Error { get; private set; }
+
+        /// <summary> List of warnings for this cell. </summary>
+        public List<string> Warnings { get; } = new();
+
+        // Reference to parent row result for auto-sync
+        internal object? ParentRow { get; set; }
+        internal string? PropertyName { get; set; }
+
+        public bool IsValid() => string.IsNullOrWhiteSpace(Error);
+
+        /// <summary>
+        /// Sets an error on this cell. Automatically syncs to parent row.
+        /// Example: row.Data.Amount.SetCellError("Amount must be positive");
+        /// </summary>
+        public void SetCellError(string error)
+        {
+            Error = error;
+            // Auto-sync to parent row if available
+            if (ParentRow != null && PropertyName != null)
+            {
+                ParentRow.GetType()
+                    .GetMethod("SetCellError", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                    ?.Invoke(ParentRow, new object[] { PropertyName, error });
+            }
+        }
+
+        /// <summary>
+        /// Adds a warning to this cell. Automatically syncs to parent row.
+        /// Example: row.Data.Amount.SetCellWarning("Amount is unusually high");
+        /// </summary>
+        public void SetCellWarning(string warning)
+        {
+            Warnings.Add(warning);
+            // Auto-sync to parent row if available
+            if (ParentRow != null && PropertyName != null)
+            {
+                ParentRow.GetType()
+                    .GetMethod("SetCellWarning", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                    ?.Invoke(ParentRow, new object[] { PropertyName, warning });
+            }
+        }
+
+        // Internal method for parsing - keep for backward compatibility
+        internal void SetError(string error) => Error = error;
+
+        //--------
+
+        /// <summary> Optional custom validators that must all pass. </summary>
+        public List<Func<T?, bool>> Validators { get; } = new();
 
         /// <summary>
         /// Set true if this cell must have a value (non-null / non-empty for strings)
